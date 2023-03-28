@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>WSL2 【Ubuntu 20.04 LTS】安装Docker | x1a0&#39;s Blog</title>
+<meta name="keywords" content="标签1, 标签2">
+<meta name="description" content="准备工作 卸载旧版本 ​ 旧版本的Docker以docker、docker.io或docker-engine为名。在尝试安装新版本之前，先卸载任何">
+<meta name="author" content="x1a0">
+<link rel="canonical" href="https://x1a05hen.github.io/posts/tech/docker-install/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.fb5f926f9bd100bd15539bcec104f406ce779900a6a5a7ee19381d2f2b75ec9f.css" integrity="sha256-&#43;1&#43;Sb5vRAL0VU5vOwQT0Bs53mQCmpafuGTgdLyt17J8=" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.acb54fd32bbc1982428b8850317e45d076b95012730a5936667e6bc21777692a.js" integrity="sha256-rLVP0yu8GYJCi4hQMX5F0Ha5UBJzClk2Zn5rwhd3aSo="
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="https://x1a05hen.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://x1a05hen.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://x1a05hen.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://x1a05hen.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="https://x1a05hen.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="WSL2 【Ubuntu 20.04 LTS】安装Docker" />
+<meta property="og:description" content="准备工作 卸载旧版本 ​ 旧版本的Docker以docker、docker.io或docker-engine为名。在尝试安装新版本之前，先卸载任何" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://x1a05hen.github.io/posts/tech/docker-install/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-03-28T19:40:22+08:00" />
+<meta property="article:modified_time" content="2023-03-28T19:40:22+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="WSL2 【Ubuntu 20.04 LTS】安装Docker"/>
+<meta name="twitter:description" content="准备工作 卸载旧版本 ​ 旧版本的Docker以docker、docker.io或docker-engine为名。在尝试安装新版本之前，先卸载任何"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "📚文章列表",
+      "item": "https://x1a05hen.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  3 ,
+      "name": "👨🏻‍💻技术",
+      "item": "https://x1a05hen.github.io/posts/tech/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  4 ,
+      "name": "WSL2 【Ubuntu 20.04 LTS】安装Docker",
+      "item": "https://x1a05hen.github.io/posts/tech/docker-install/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "WSL2 【Ubuntu 20.04 LTS】安装Docker",
+  "name": "WSL2 【Ubuntu 20.04 LTS】安装Docker",
+  "description": "准备工作 卸载旧版本 ​ 旧版本的Docker以docker、docker.io或docker-engine为名。在尝试安装新版本之前，先卸载任何",
+  "keywords": [
+    "标签1", "标签2"
+  ],
+  "articleBody": "准备工作 卸载旧版本 ​\t旧版本的Docker以docker、docker.io或docker-engine为名。在尝试安装新版本之前，先卸载任何此类旧版本。\nsudo apt-get remove docker docker-engine docker.io containerd runc ​\tapt-get 显示没有包，则证明没有安装过。若以前安装过docker，则还需清除镜像、容器等：\nsudo rm -rf /var/lib/docker sudo rm -rf /var/lib/containerd apt换源 ​\t备份源列表\nsudo cp /etc/apt/sources.list /etc/apt/sources.list.bak ​\t命令行打开sources.list文件\nsudo vim /etc/apt/sources.list ​\t将源文件内容全部注释,并添加以下任意源\n阿里云源\ndeb http://mirrors.aliyun.com/ubuntu/ focal main restricted universe multiverse deb-src http://mirrors.aliyun.com/ubuntu/ focal main restricted universe multiverse deb http://mirrors.aliyun.com/ubuntu/ focal-security main restricted universe multiverse deb-src http://mirrors.aliyun.com/ubuntu/ focal-security main restricted universe multiverse deb http://mirrors.aliyun.com/ubuntu/ focal-updates main restricted universe multiverse deb-src http://mirrors.aliyun.com/ubuntu/ focal-updates main restricted universe multiverse deb http://mirrors.aliyun.com/ubuntu/ focal-proposed main restricted universe multiverse deb-src http://mirrors.aliyun.com/ubuntu/ focal-proposed main restricted universe multiverse deb http://mirrors.aliyun.com/ubuntu/ focal-backports main restricted universe multiverse deb-src http://mirrors.aliyun.com/ubuntu/ focal-backports main restricted universe multiverse 清华源\ndeb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal main restricted deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-updates main restricted deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal universe deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-updates universe deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal multiverse deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-updates multiverse deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-backports main restricted universe multiverse deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-security main restricted deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-security universe deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-security multiverse 中科大\ndeb https://mirrors.ustc.edu.cn/ubuntu/ bionic main restricted universe multiverse deb-src https://mirrors.ustc.edu.cn/ubuntu/ bionic main restricted universe multiverse deb https://mirrors.ustc.edu.cn/ubuntu/ bionic-updates main restricted universe multiverse deb-src https://mirrors.ustc.edu.cn/ubuntu/ bionic-updates main restricted universe multiverse deb https://mirrors.ustc.edu.cn/ubuntu/ bionic-backports main restricted universe multiverse deb-src https://mirrors.ustc.edu.cn/ubuntu/ bionic-backports main restricted universe multiverse deb https://mirrors.ustc.edu.cn/ubuntu/ bionic-security main restricted universe multiverse deb-src https://mirrors.ustc.edu.cn/ubuntu/ bionic-security main restricted universe multiverse deb https://mirrors.ustc.edu.cn/ubuntu/ bionic-proposed main restricted universe multiverse deb-src https://mirrors.ustc.edu.cn/ubuntu/ bionic-proposed main restricted universe multiverse 安装 1. 设置仓库 ​\t在新主机上首次安装Docker引擎之前，需要设置Docker存储库。之后，可以从存储库安装和更新Docker。\n更新 apt 包索引 sudo apt update 安装 apt 依赖包，用于通过 HTTPS 来获取仓库： sudo apt install \\ apt-transport-https \\ ca-certificates \\ curl \\ gnupg-agent \\ software-properties-common 添加 Docker 的官方 GPG 密钥： curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add - ok\n9DC8 5822 9FC7 DD38 854A E2D8 8D81 803C 0EBF CD88 通过搜索指纹的后 8 个字符，验证您现在是否拥有带有指纹的密钥。 sudo apt-key fingerprint 0EBFCD88 pub rsa4096 2017-02-22 [SCEA] 9DC8 5822 9FC7 DD38 854A E2D8 8D81 803C 0EBF CD88 uid [ unknown] Docker Release (CE deb) sub rsa4096 2017-02-22 [S] 使用以下指令设置官方稳定版仓库(使用阿里云镜像库) sudo add-apt-repository \\ \"deb [arch=amd64] https://mirrors.aliyun.com/docker-ce/linux/ubuntu \\ $(lsb_release -cs) \\ stable\" 2.安装 Docker Engine ​\t更新gpt\nsudo apt update 安装最新版本的 Docker Engine 和 containerd sudo apt install docker-ce docker-ce-cli containerd.io 安装特定版本的 Docker Engine: ​\t列出可用版本\napt-cache madison docker-ce ​\t使用第二列的版本号安装指定版本, 例如：5:20.10.23~3-0~ubuntu-focal\nsudo apt install docker-ce= docker-ce-cli= containerd.io ​\t等待安装完成\n3.测试 sudo docker run hello-world ​\t遇到问题\nCannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running? ​\t输入docker，会显示 –help，证明docker安装成功，是没有启动\ncd /var/run service docker start ​\t之后再测试，则没有问题\nHello from Docker! This message shows that your installation appears to be working correctly. 其他工作 配置非root用户使用docker ​\t以非 root 用户运行 Docker，需要将用户添加到 docker 组\nsudo usermod -aG docker $USER ​\t重启 Docker\nsudo service docker restart ​\t退出当前用户重新登录，再查看\ndocker -v ​\tok\n配置Docker镜像加速 ​\t阿里云容器，生成自己的加速地址\n​\t登录：https://cr.console.aliyun.com/\n​\t点击 “创建我的容器镜像”，在左侧镜像工具下拉栏，找到镜像加速器，即可看到自己专属加速地址。\n​\t可以通过修改daemon配置文件/etc/docker/daemon.json来使用加速器\nsudo mkdir -p /etc/docker sudo tee /etc/docker/daemon.json \u003c\u003c-'EOF' { \"registry-mirrors\": [\"https://*****（此处为自己的地址）\"] } EOF # 重启docker sudo service docker restart ### 注意 WSL没有systemctl ，所以只能用service ",
+  "wordCount" : "1149",
+  "inLanguage": "en",
+  "datePublished": "2023-03-28T19:40:22+08:00",
+  "dateModified": "2023-03-28T19:40:22+08:00",
+  "author":[{
+    "@type": "Person",
+    "name": "x1a0"
+  }],
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://x1a05hen.github.io/posts/tech/docker-install/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "x1a0's Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://x1a05hen.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://x1a05hen.github.io" accesskey="h" title="x1a0&#39;s Blog (Alt + H)">x1a0&#39;s Blog</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://x1a05hen.github.io/search" title="🔍搜索">
+                    <span>🔍搜索</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://x1a05hen.github.io/" title="🏠主页">
+                    <span>🏠主页</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://x1a05hen.github.io/posts" title="📚文章">
+                    <span>📚文章</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://x1a05hen.github.io/archives/" title="⏱时间轴">
+                    <span>⏱时间轴</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="https://x1a05hen.github.io">Home</a>&nbsp;»&nbsp;<a href="https://x1a05hen.github.io/posts/">📚文章列表</a>&nbsp;»&nbsp;<a href="https://x1a05hen.github.io/posts/tech/">👨🏻‍💻技术</a></div>
+    <h1 class="post-title">
+      WSL2 【Ubuntu 20.04 LTS】安装Docker
+    </h1>
+    <div class="post-meta">
+
+
+
+
+
+
+
+
+
+
+创建:&nbsp;<span title='2023-03-28 19:40:22 +0800 CST'>2023-03-28</span>&nbsp;|&nbsp;更新:&nbsp;2023-03-28&nbsp;|&nbsp;字数:&nbsp;1149字&nbsp;|&nbsp;时长: 3分钟&nbsp;|&nbsp;x1a0
+
+</div>
+  </header> <aside id="toc-container" class="toc-container wide">
+    <div class="toc">
+        <details  open>
+            <summary accesskey="c" title="(Alt + C)">
+                <span class="details">Table of Contents</span>
+            </summary>
+
+            <div class="inner"><ul>
+                    <li>
+                        <a href="#%e5%87%86%e5%a4%87%e5%b7%a5%e4%bd%9c" aria-label="准备工作">准备工作</a></li>
+                    <li>
+                        <a href="#%e5%ae%89%e8%a3%85" aria-label="安装">安装</a><ul>
+                            
+                    <li>
+                        <a href="#1-%e8%ae%be%e7%bd%ae%e4%bb%93%e5%ba%93" aria-label="1. 设置仓库">1. 设置仓库</a></li>
+                    <li>
+                        <a href="#2%e5%ae%89%e8%a3%85-docker-engine" aria-label="2.安装 Docker Engine">2.安装 Docker Engine</a></li>
+                    <li>
+                        <a href="#3%e6%b5%8b%e8%af%95" aria-label="3.测试">3.测试</a></li></ul>
+                    </li>
+                    <li>
+                        <a href="#%e5%85%b6%e4%bb%96%e5%b7%a5%e4%bd%9c" aria-label="其他工作">其他工作</a><ul>
+                            
+                    <li>
+                        <a href="#%e9%85%8d%e7%bd%ae%e9%9d%9eroot%e7%94%a8%e6%88%b7%e4%bd%bf%e7%94%a8docker" aria-label="配置非root用户使用docker">配置非root用户使用docker</a></li>
+                    <li>
+                        <a href="#%e9%85%8d%e7%bd%aedocker%e9%95%9c%e5%83%8f%e5%8a%a0%e9%80%9f" aria-label="配置Docker镜像加速">配置Docker镜像加速</a>
+                    </li>
+                </ul>
+                </li>
+                </ul>
+            </div>
+        </details>
+    </div>
+</aside>
+<script>
+    let activeElement;
+    let elements;
+    window.addEventListener('DOMContentLoaded', function (event) {
+        checkTocPosition();
+
+        elements = document.querySelectorAll('h1[id],h2[id],h3[id],h4[id],h5[id],h6[id]');
+         
+         activeElement = elements[0];
+         const id = encodeURI(activeElement.getAttribute('id')).toLowerCase();
+         document.querySelector(`.inner ul li a[href="#${id}"]`).classList.add('active');
+     }, false);
+
+    window.addEventListener('resize', function(event) {
+        checkTocPosition();
+    }, false);
+
+    window.addEventListener('scroll', () => {
+        
+        activeElement = Array.from(elements).find((element) => {
+            if ((getOffsetTop(element) - window.pageYOffset) > 0 && 
+                (getOffsetTop(element) - window.pageYOffset) < window.innerHeight/2) {
+                return element;
+            }
+        }) || activeElement
+
+        elements.forEach(element => {
+             const id = encodeURI(element.getAttribute('id')).toLowerCase();
+             if (element === activeElement){
+                 document.querySelector(`.inner ul li a[href="#${id}"]`).classList.add('active');
+             } else {
+                 document.querySelector(`.inner ul li a[href="#${id}"]`).classList.remove('active');
+             }
+         })
+     }, false);
+
+    const main = parseInt(getComputedStyle(document.body).getPropertyValue('--article-width'), 10);
+    const toc = parseInt(getComputedStyle(document.body).getPropertyValue('--toc-width'), 10);
+    const gap = parseInt(getComputedStyle(document.body).getPropertyValue('--gap'), 10);
+
+    function checkTocPosition() {
+        const width = document.body.scrollWidth;
+
+        if (width - main - (toc * 2) - (gap * 4) > 0) {
+            document.getElementById("toc-container").classList.add("wide");
+        } else {
+            document.getElementById("toc-container").classList.remove("wide");
+        }
+    }
+
+    function getOffsetTop(element) {
+        if (!element.getClientRects().length) {
+            return 0;
+        }
+        let rect = element.getBoundingClientRect();
+        let win = element.ownerDocument.defaultView;
+        return rect.top + win.pageYOffset;   
+    }
+</script>
+
+  <div class="post-content"><h2 id="准备工作">准备工作<a hidden class="anchor" aria-hidden="true" href="#准备工作">#</a></h2>
+<ol>
+<li>卸载旧版本</li>
+</ol>
+<p>​		旧版本的<code>Docker</code>以<code>docker</code>、<code>docker.io</code>或<code>docker-engine</code>为名。在尝试安装新版本之前，先卸载任何此类旧版本。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo apt-get remove docker docker-engine docker.io containerd runc
+</span></span></code></pre></div><p>​		apt-get 显示没有包，则证明没有安装过。若以前安装过docker，则还需清除镜像、容器等：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo rm -rf /var/lib/docker
+</span></span><span style="display:flex;"><span>sudo rm -rf /var/lib/containerd
+</span></span></code></pre></div><ol start="2">
+<li>apt换源</li>
+</ol>
+<p>​		备份源列表</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo cp /etc/apt/sources.list /etc/apt/sources.list.bak
+</span></span></code></pre></div><p>​		命令行打开sources.list文件</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo vim /etc/apt/sources.list
+</span></span></code></pre></div><p>​		将源文件内容全部注释,并添加以下任意源</p>
+<p><strong>阿里云源</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>deb http://mirrors.aliyun.com/ubuntu/ focal main restricted universe multiverse
+</span></span><span style="display:flex;"><span>deb-src http://mirrors.aliyun.com/ubuntu/ focal main restricted universe multiverse
+</span></span><span style="display:flex;"><span>deb http://mirrors.aliyun.com/ubuntu/ focal-security main restricted universe multiverse
+</span></span><span style="display:flex;"><span>deb-src http://mirrors.aliyun.com/ubuntu/ focal-security main restricted universe multiverse
+</span></span><span style="display:flex;"><span>deb http://mirrors.aliyun.com/ubuntu/ focal-updates main restricted universe multiverse
+</span></span><span style="display:flex;"><span>deb-src http://mirrors.aliyun.com/ubuntu/ focal-updates main restricted universe multiverse
+</span></span><span style="display:flex;"><span>deb http://mirrors.aliyun.com/ubuntu/ focal-proposed main restricted universe multiverse
+</span></span><span style="display:flex;"><span>deb-src http://mirrors.aliyun.com/ubuntu/ focal-proposed main restricted universe multiverse
+</span></span><span style="display:flex;"><span>deb http://mirrors.aliyun.com/ubuntu/ focal-backports main restricted universe multiverse
+</span></span><span style="display:flex;"><span>deb-src http://mirrors.aliyun.com/ubuntu/ focal-backports main restricted universe multiverse
+</span></span></code></pre></div><p><strong>清华源</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal main restricted
+</span></span><span style="display:flex;"><span>deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-updates main restricted
+</span></span><span style="display:flex;"><span>deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal universe
+</span></span><span style="display:flex;"><span>deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-updates universe
+</span></span><span style="display:flex;"><span>deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal multiverse
+</span></span><span style="display:flex;"><span>deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-updates multiverse
+</span></span><span style="display:flex;"><span>deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-backports main restricted universe multiverse
+</span></span><span style="display:flex;"><span>deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-security main restricted
+</span></span><span style="display:flex;"><span>deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-security universe
+</span></span><span style="display:flex;"><span>deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-security multiverse
+</span></span></code></pre></div><p><strong>中科大</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>deb https://mirrors.ustc.edu.cn/ubuntu/ bionic main restricted universe multiverse
+</span></span><span style="display:flex;"><span>deb-src https://mirrors.ustc.edu.cn/ubuntu/ bionic main restricted universe multiverse
+</span></span><span style="display:flex;"><span>deb https://mirrors.ustc.edu.cn/ubuntu/ bionic-updates main restricted universe multiverse
+</span></span><span style="display:flex;"><span>deb-src https://mirrors.ustc.edu.cn/ubuntu/ bionic-updates main restricted universe multiverse
+</span></span><span style="display:flex;"><span>deb https://mirrors.ustc.edu.cn/ubuntu/ bionic-backports main restricted universe multiverse
+</span></span><span style="display:flex;"><span>deb-src https://mirrors.ustc.edu.cn/ubuntu/ bionic-backports main restricted universe multiverse
+</span></span><span style="display:flex;"><span>deb https://mirrors.ustc.edu.cn/ubuntu/ bionic-security main restricted universe multiverse
+</span></span><span style="display:flex;"><span>deb-src https://mirrors.ustc.edu.cn/ubuntu/ bionic-security main restricted universe multiverse
+</span></span><span style="display:flex;"><span>deb https://mirrors.ustc.edu.cn/ubuntu/ bionic-proposed main restricted universe multiverse
+</span></span><span style="display:flex;"><span>deb-src https://mirrors.ustc.edu.cn/ubuntu/ bionic-proposed main restricted universe multiverse
+</span></span></code></pre></div><h2 id="安装">安装<a hidden class="anchor" aria-hidden="true" href="#安装">#</a></h2>
+<h3 id="1-设置仓库">1. 设置仓库<a hidden class="anchor" aria-hidden="true" href="#1-设置仓库">#</a></h3>
+<p>​		在新主机上首次安装<code>Docker</code>引擎之前，需要设置<code>Docker</code>存储库。之后，可以从存储库安装和更新<code>Docker</code>。</p>
+<ol>
+<li>更新 apt 包索引</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>sudo apt update
+</span></span></code></pre></div><ol start="2">
+<li>安装 apt 依赖包，用于通过 HTTPS 来获取仓库：</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo apt install <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  apt-transport-https <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  ca-certificates <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  curl <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  gnupg-agent <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  software-properties-common
+</span></span></code></pre></div><ol start="3">
+<li>添加 Docker 的官方 GPG 密钥：</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+</span></span></code></pre></div><p>ok</p>
+<ol start="4">
+<li>9DC8 5822 9FC7 DD38 854A E2D8 8D81 803C 0EBF CD88 通过搜索指纹的后 8 个字符，验证您现在是否拥有带有指纹的密钥。</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo apt-key fingerprint 0EBFCD88
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>pub   rsa4096 2017-02-22 <span style="color:#f92672">[</span>SCEA<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>      9DC8 <span style="color:#ae81ff">5822</span> 9FC7 DD38 854A  E2D8 8D81 803C 0EBF CD88
+</span></span><span style="display:flex;"><span>uid           <span style="color:#f92672">[</span> unknown<span style="color:#f92672">]</span> Docker Release <span style="color:#f92672">(</span>CE deb<span style="color:#f92672">)</span> &lt;docker@docker.com&gt;
+</span></span><span style="display:flex;"><span>sub   rsa4096 2017-02-22 <span style="color:#f92672">[</span>S<span style="color:#f92672">]</span>
+</span></span></code></pre></div><ol start="5">
+<li>使用以下指令设置官方稳定版仓库(使用阿里云镜像库)</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo add-apt-repository <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>   <span style="color:#e6db74">&#34;deb [arch=amd64] https://mirrors.aliyun.com/docker-ce/linux/ubuntu \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">   </span><span style="color:#66d9ef">$(</span>lsb_release -cs<span style="color:#66d9ef">)</span><span style="color:#e6db74"> \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">   stable&#34;</span>
+</span></span></code></pre></div><h3 id="2安装-docker-engine">2.安装 Docker Engine<a hidden class="anchor" aria-hidden="true" href="#2安装-docker-engine">#</a></h3>
+<p>​		更新gpt</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo apt update
+</span></span></code></pre></div><ol>
+<li>安装最新版本的 Docker Engine 和 containerd</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo apt install docker-ce docker-ce-cli containerd.io
+</span></span></code></pre></div><ol start="2">
+<li>安装特定版本的 Docker Engine:</li>
+</ol>
+<p>​		列出可用版本</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>apt-cache madison docker-ce
+</span></span></code></pre></div><p>​		使用第二列的版本号安装指定版本, 例如：<code>5:20.10.23~3-0~ubuntu-focal</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo apt install docker-ce<span style="color:#f92672">=</span>&lt;VERSION_STRING&gt; docker-ce-cli<span style="color:#f92672">=</span>&lt;VERSION_STRING&gt; containerd.io
+</span></span></code></pre></div><p>​		等待安装完成</p>
+<h3 id="3测试">3.测试<a hidden class="anchor" aria-hidden="true" href="#3测试">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo docker run hello-world
+</span></span></code></pre></div><p>​		遇到问题</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?
+</span></span></code></pre></div><p>​		输入docker，会显示 &ndash;help，证明docker安装成功，是没有启动</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>cd /var/run
+</span></span><span style="display:flex;"><span>service docker start
+</span></span></code></pre></div><p>​		之后再测试，则没有问题</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>Hello from Docker!
+</span></span><span style="display:flex;"><span>This message shows that your installation appears to be working correctly.
+</span></span></code></pre></div><h2 id="其他工作">其他工作<a hidden class="anchor" aria-hidden="true" href="#其他工作">#</a></h2>
+<h3 id="配置非root用户使用docker">配置非root用户使用docker<a hidden class="anchor" aria-hidden="true" href="#配置非root用户使用docker">#</a></h3>
+<p>​		以非 root 用户运行 Docker，需要将用户添加到 docker 组</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo usermod -aG docker $USER
+</span></span></code></pre></div><p>​		重启 Docker</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo service docker restart
+</span></span></code></pre></div><p>​		退出当前用户重新登录，再查看</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>docker -v
+</span></span></code></pre></div><p>​		ok</p>
+<h3 id="配置docker镜像加速">配置Docker镜像加速<a hidden class="anchor" aria-hidden="true" href="#配置docker镜像加速">#</a></h3>
+<p>​		阿里云容器，生成自己的加速地址</p>
+<p>​		登录：https://cr.console.aliyun.com/</p>
+<p>​		点击 “创建我的容器镜像”，在左侧镜像工具下拉栏，找到镜像加速器，即可看到自己专属加速地址。</p>
+<p>​		可以通过修改daemon配置文件/etc/docker/daemon.json来使用加速器</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo mkdir -p /etc/docker
+</span></span><span style="display:flex;"><span>sudo tee /etc/docker/daemon.json <span style="color:#e6db74">&lt;&lt;-&#39;EOF&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">{
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  &#34;registry-mirrors&#34;: [&#34;https://*****（此处为自己的地址）&#34;]
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOF</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 重启docker</span>
+</span></span><span style="display:flex;"><span>sudo service docker restart
+</span></span><span style="display:flex;"><span><span style="color:#75715e">### 注意</span>
+</span></span><span style="display:flex;"><span>WSL没有systemctl ，所以只能用service
+</span></span></code></pre></div>
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="https://x1a05hen.github.io/tags/%E6%A0%87%E7%AD%BE1/">标签1</a></li>
+      <li><a href="https://x1a05hen.github.io/tags/%E6%A0%87%E7%AD%BE2/">标签2</a></li>
+    </ul>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2023 <a href="https://x1a05hen.github.io">x1a0&#39;s Blog</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
+
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>
