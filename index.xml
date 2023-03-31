@@ -6,14 +6,23 @@
     <description>Recent content on x1a0&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Tue, 28 Mar 2023 19:40:22 +0800</lastBuildDate><atom:link href="https://x1a05hen.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 31 Mar 2023 19:14:05 +0800</lastBuildDate><atom:link href="https://x1a05hen.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>RedMi AC2100 刷固件</title>
+      <link>https://x1a05hen.github.io/posts/other/redmi/</link>
+      <pubDate>Fri, 31 Mar 2023 19:14:05 +0800</pubDate>
+      
+      <guid>https://x1a05hen.github.io/posts/other/redmi/</guid>
+      <description>一、初始化 首先插网线，初始化一下路由器设置，设置完成后会得到后台链接 192.168.31.1 二、刷入bread 刷机前请注意： 关闭电脑上的防火墙以及杀毒软件； 请全程</description>
+    </item>
+    
     <item>
       <title>WSL2 【Ubuntu 20.04 LTS】安装Docker</title>
       <link>https://x1a05hen.github.io/posts/tech/docker-install/</link>
       <pubDate>Tue, 28 Mar 2023 19:40:22 +0800</pubDate>
       
       <guid>https://x1a05hen.github.io/posts/tech/docker-install/</guid>
-      <description>准备工作 卸载旧版本 ​ 旧版本的Docker以docker、docker.io或docker-engine为名。在尝试安装新版本之前，先卸载任何</description>
+      <description>一、准备工作 卸载旧版本 ​ 旧版本的Docker以docker、docker.io或docker-engine为名。在尝试安装新版本之前，先卸载</description>
     </item>
     
   </channel>

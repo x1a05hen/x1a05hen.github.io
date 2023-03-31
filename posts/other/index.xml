@@ -5,6 +5,16 @@
     <link>https://x1a05hen.github.io/posts/other/</link>
     <description>Recent content in 🏖其他 on x1a0&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>zh-cn</language><atom:link href="https://x1a05hen.github.io/posts/other/index.xml" rel="self" type="application/rss+xml" />
+    <language>zh-cn</language>
+    <lastBuildDate>Fri, 31 Mar 2023 19:14:05 +0800</lastBuildDate><atom:link href="https://x1a05hen.github.io/posts/other/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>RedMi AC2100 刷固件</title>
+      <link>https://x1a05hen.github.io/posts/other/redmi/</link>
+      <pubDate>Fri, 31 Mar 2023 19:14:05 +0800</pubDate>
+      
+      <guid>https://x1a05hen.github.io/posts/other/redmi/</guid>
+      <description>一、初始化 首先插网线，初始化一下路由器设置，设置完成后会得到后台链接 192.168.31.1 二、刷入bread 刷机前请注意： 关闭电脑上的防火墙以及杀毒软件； 请全程</description>
+    </item>
+    
   </channel>
 </rss>

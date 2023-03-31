@@ -2,10 +2,19 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://x1a05hen.github.io/posts/tech/</loc>
-    <lastmod>2023-03-28T19:40:22+08:00</lastmod>
-  </url><url>
     <loc>https://x1a05hen.github.io/posts/</loc>
+    <lastmod>2023-03-31T19:14:05+08:00</lastmod>
+  </url><url>
+    <loc>https://x1a05hen.github.io/posts/other/redmi/</loc>
+    <lastmod>2023-03-31T19:14:05+08:00</lastmod>
+  </url><url>
+    <loc>https://x1a05hen.github.io/</loc>
+    <lastmod>2023-03-31T19:14:05+08:00</lastmod>
+  </url><url>
+    <loc>https://x1a05hen.github.io/posts/other/</loc>
+    <lastmod>2023-03-31T19:14:05+08:00</lastmod>
+  </url><url>
+    <loc>https://x1a05hen.github.io/posts/tech/</loc>
     <lastmod>2023-03-28T19:40:22+08:00</lastmod>
   </url><url>
     <loc>https://x1a05hen.github.io/categories/</loc>
@@ -15,9 +24,6 @@
     <lastmod>2023-03-28T19:40:22+08:00</lastmod>
   </url><url>
     <loc>https://x1a05hen.github.io/posts/tech/docker-install/</loc>
-    <lastmod>2023-03-28T19:40:22+08:00</lastmod>
-  </url><url>
-    <loc>https://x1a05hen.github.io/</loc>
     <lastmod>2023-03-28T19:40:22+08:00</lastmod>
   </url><url>
     <loc>https://x1a05hen.github.io/categories/%E5%88%86%E7%B1%BB1/</loc>
@@ -35,7 +41,5 @@
     <loc>https://x1a05hen.github.io/posts/learn/</loc>
   </url><url>
     <loc>https://x1a05hen.github.io/series/</loc>
-  </url><url>
-    <loc>https://x1a05hen.github.io/posts/other/</loc>
   </url>
 </urlset>
