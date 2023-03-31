@@ -5,6 +5,16 @@
     <link>https://x1a05hen.github.io/posts/learn/</link>
     <description>Recent content in 📕各类学习 on x1a0&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>zh-cn</language><atom:link href="https://x1a05hen.github.io/posts/learn/index.xml" rel="self" type="application/rss+xml" />
+    <language>zh-cn</language>
+    <lastBuildDate>Fri, 31 Mar 2023 19:27:10 +0800</lastBuildDate><atom:link href="https://x1a05hen.github.io/posts/learn/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>安服面试可能问题整理</title>
+      <link>https://x1a05hen.github.io/posts/learn/offer/</link>
+      <pubDate>Fri, 31 Mar 2023 19:27:10 +0800</pubDate>
+      
+      <guid>https://x1a05hen.github.io/posts/learn/offer/</guid>
+      <description>大部分为OWASP top 10的相关情况 反弹shell nc -lvvp 7777 -e /bin/bash 一、sql注入 原理 当web应用向后台数据库传递SQL语句进行数据库操作时如果对用户</description>
+    </item>
+    
   </channel>
 </rss>
